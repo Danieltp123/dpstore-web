@@ -66,7 +66,7 @@ const overrides: Overrides = {
   },
   MuiButton: {
     root: {
-      textTransform: 'capitalize',
+      textTransform: 'none',
       fontWeight: 500,
       borderRadius: 8
     }

@@ -19,7 +19,7 @@ const props: ComponentsProps = {
     margin: 'dense'
   },
   MuiGrid: {
-    spacing: 2
+    spacing: 3
   },
   MuiTypography: {
     variantMapping: {

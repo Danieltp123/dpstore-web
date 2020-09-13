@@ -1,22 +1,22 @@
-import { blueGrey, green, lightGreen } from '@material-ui/core/colors';
+import { deepOrange, green, grey } from '@material-ui/core/colors';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 
 import { ThemesTypes } from './context';
 
 const Pallete: { [key in ThemesTypes]: PaletteOptions } = {
   light: {
-    grey: blueGrey,
+    // grey: deepOrange,
     type: 'light',
     primary: {
-      light: lightGreen[500],
-      main: blueGrey[700],
-      dark: blueGrey[900],
+      light: grey[500],
+      main: deepOrange[700],
+      dark: deepOrange[900],
       contrastText: '#fff'
     },
     secondary: {
-      light: blueGrey[100],
-      main: lightGreen[500],
-      dark: lightGreen[300],
+      light: deepOrange[100],
+      main: grey[900],
+      dark: grey[300],
       contrastText: '#fff'
     }
   },
