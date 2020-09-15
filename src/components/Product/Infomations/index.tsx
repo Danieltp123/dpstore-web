@@ -3,49 +3,59 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import { useShoppingCart } from 'components/ShoppingCart/Context';
+import Toast from 'components/Toast';
 import money from 'hooks/useMask/money';
 import { IProduct } from 'models/product';
 import React from 'react';
-import { addProductInCard } from 'stores/shoppingCart';
+import { useMutation } from 'react-apollo';
+import { incrementInShoppingCart } from 'services/product';
+import { addProductInCart } from 'stores/shoppingCart';
 
-import useStyles from './styles';
+import ProductAvailableQty from '../ProductAvailableQty';
 
 interface IProps {
   product: IProduct;
 }
 
 export default function ProductInformations(props: IProps) {
-  const classes = useStyles();
   const { product } = props;
   const [,dispatch] = useShoppingCart();
+  const [handleIcrementAvailableQty] = useMutation<IProduct>(
+    incrementInShoppingCart
+  );
 
-  const handleAddInCard = () => {
-    dispatch(addProductInCard(product))
+  const handleAddInCart = async () => {
+    handleIcrementAvailableQty({
+      variables:{ _id: product._id }
+    }).then(()=>{
+      dispatch(addProductInCart(product));
+    }).catch(error=> {
+      Toast.error(error);
+    })
   }
 
   return (
     <>
       <Grid item xs={12}>
-        <Typography variant='body1' style={{ flexGrow: 1, width: '100%' }} gutterBottom>
+        <Typography variant='body1' gutterBottom>
           {product.description}<br />
         </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <Typography variant='body1' style={{ flexGrow: 1, width: '100%' }}>
-          Preço: {money.apply(product.price)}<br />
-          Disponível: {product.availableQty} unidade(s)
+        <Typography variant="h5">
+          por {money.apply(product.price)}
         </Typography>
-      </Grid>
-      <Grid item className={classes.buttonGrid} xs={12}>
-        <Button 
-          startIcon={<AddShoppingCartIcon />}
-          size="large"
-          color='primary'
-          variant='contained'
-          onClick={handleAddInCard}
-        >
-          Adicionar ao carrinho
-        </Button>
+        <ProductAvailableQty product={product}/>
+        <Typography align="center">
+          <Button 
+            startIcon={<AddShoppingCartIcon />}
+            size="large"
+            color='primary'
+            variant='contained'
+            disabled={(product.availableQty - product.inShoppingCart) < 1}
+            onClick={handleAddInCart}
+          >
+            Adicionar ao carrinho
+          </Button>
+        </Typography>
       </Grid>
     </>
   );

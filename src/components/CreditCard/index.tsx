@@ -1,24 +1,46 @@
-import { Grid, TextField } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import TextField from 'components/Fields/Text';
+import { useFormikContext } from 'formik';
+import { Values } from 'pages/Checkout';
 import React from 'react';
 
-// import useStyles from './styles';
-
 function CreditCard() {
-  // const classes = useStyles();
+  const formik = useFormikContext<Values>();
 
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
-        <TextField label="NÚMERO DO CARTÃO" />
+        <TextField
+          label="NÚMERO DO CARTÃO"
+          name="creditCard"
+          mask="creditCard"
+          formik={formik}
+        />
       </Grid>
-      <Grid item xs={8} md={7}>
-        <TextField label="TITULAR DO CARTÃO" />
+      <Grid item xs={8} md={6}>
+        <TextField 
+          label="TITULAR DO CARTÃO"
+          name="personNameCard"
+          formik={formik}
+        />
       </Grid>
-      <Grid item xs={4} md={5}>
-        <TextField label="EXPIRA" />
+      <Grid item xs={4} md={6}>
+        <TextField
+          label="EXPIRA"
+          name="expire"
+          type="date"
+          formik={formik}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
       </Grid>
       <Grid item xs={3}>
-        <TextField label="CVV" />
+        <TextField 
+          label="CVV"
+          name="cvv"
+          formik={formik}
+        />
       </Grid>
     </Grid>
   );

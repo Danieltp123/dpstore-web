@@ -12,7 +12,12 @@ const useStyles = makeStyles((theme: Theme) =>
     media: {
       height: 0,
       paddingTop: '56.25%', // 16:9
+      backgroundSize: 'contain'
     },
+    iconButton:{
+      paddingRight:20,
+      paddingBottom:20
+    }
   }),
 );
 

@@ -77,7 +77,12 @@ const overrides: Overrides = {
         backgroundColor: blueGrey[100]
       }
     }
-  }
+  },
+  MuiBackdrop: {
+    root: {
+      backdropFilter: 'blur(5px)',
+    },
+  },
 };
 
 export default overrides;

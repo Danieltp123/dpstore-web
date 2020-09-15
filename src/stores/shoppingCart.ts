@@ -1,7 +1,8 @@
-import { IProduct, IProductInCard } from 'models/product';
+import { IProduct } from 'models/product';
 
 /* Actions enums */
-export enum enProductsInCardAction {
+export enum enProductsInCartAction {
+  INIT_PRODUCTS_IN_CART = 'INIT_PRODUCTS_IN_CART',
   ADD_PRODUCT = 'ADD_PRODUCT',
   REMOVE_PRODUCT = 'REMOVE_PRODUCT',
   INCREMENT_QTY = 'INCREMENT_QTY',
@@ -10,43 +11,46 @@ export enum enProductsInCardAction {
 }
 
 /* Initial State. */
-export const initialState: IProductInCard[] = [];
+export const initialState: IProduct[] = [];
 
 /* Reducer */
-export default (state = initialState, action: any): IProductInCard[] => {
+export default (state = initialState, action: any): IProduct[] => {
   switch (action.type) {
-    case enProductsInCardAction.ADD_PRODUCT:
+    case enProductsInCartAction.INIT_PRODUCTS_IN_CART:
+      return action.inShoppingCart;
+
+    case enProductsInCartAction.ADD_PRODUCT:
       const hasProduct = state.find(item => item._id === action.product._id);
       if (hasProduct) {
         return state.map(item => {
           if (item._id === action.product._id) {
-            item.productQty += 1;
+            item.inShoppingCart += 1;
           }
           return item;
         });
       };
-      return [...state, {...action.product, productQty: 1} as IProductInCard];
-
-    case enProductsInCardAction.REMOVE_PRODUCT:
+      return [...state, {...action.product, inShoppingCart: 1} as IProduct];
+      
+    case enProductsInCartAction.REMOVE_PRODUCT:
       return state.filter(item => item._id !== action._id);
-
-    case enProductsInCardAction.INCREMENT_QTY:
+        
+    case enProductsInCartAction.INCREMENT_QTY:
       return state.map(item => {
         if (item._id === action._id) {
-          item.productQty += 1;
+          item.inShoppingCart += 1;
         }
         return item;
       });
 
-    case enProductsInCardAction.DECREMENT_QTY:
+    case enProductsInCartAction.DECREMENT_QTY:
       return state.map(item => {
         if (item._id === action._id) {
-          item.productQty -= 1;
+          item.inShoppingCart -= 1;
         }
         return item;
       });
 
-    case enProductsInCardAction.RESET_DATA:
+    case enProductsInCartAction.RESET_DATA:
       return initialState;
 
     default:
@@ -55,23 +59,30 @@ export default (state = initialState, action: any): IProductInCard[] => {
 };
 
 /*  Action Creators Functions. */
-export function addProductInCard(product: IProduct) {
+export function addProductsInCart(inShoppingCart: IProduct[]) {
   return {
-    type: enProductsInCardAction.ADD_PRODUCT,
+    type: enProductsInCartAction.INIT_PRODUCTS_IN_CART,
+    inShoppingCart
+  };
+}
+
+export function addProductInCart(product: IProduct) {
+  return {
+    type: enProductsInCartAction.ADD_PRODUCT,
     product
   };
 }
 
-export function removeProductInCard(_id: string) {
+export function removeProductInCart(_id: string) {
   return {
-    type: enProductsInCardAction.REMOVE_PRODUCT,
+    type: enProductsInCartAction.REMOVE_PRODUCT,
     _id
   };
 }
 
 export function incrementQty(_id: string, qty: number = 1) {
   return {
-    type: enProductsInCardAction.INCREMENT_QTY,
+    type: enProductsInCartAction.INCREMENT_QTY,
     _id,
     qty
   };
@@ -79,14 +90,14 @@ export function incrementQty(_id: string, qty: number = 1) {
 
 export function decrementQty(_id: string, qty: number = 1) {
   return {
-    type: enProductsInCardAction.DECREMENT_QTY,
+    type: enProductsInCartAction.DECREMENT_QTY,
     _id,
     qty
   };
 }
 
-export function resetProductInCard() {
+export function resetProductInCart() {
   return {
-    type: enProductsInCardAction.RESET_DATA
+    type: enProductsInCartAction.RESET_DATA
   };
 }

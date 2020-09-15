@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(4),
-      minHeight:'57vh !important'
+      minHeight:'70vh !important'
     },
     logo:{
       backgroundColor: theme.palette.secondary.main,
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
     footer:{
       width: '100%',
       textAlign: 'center'
-    }
+    },
   }),
 );
 

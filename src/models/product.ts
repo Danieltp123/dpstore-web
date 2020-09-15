@@ -4,9 +4,6 @@ export interface IProduct {
   title: string;
   description: string;
   availableQty: number;
+  inShoppingCart: number;
   imgUrl: string;
-}
-
-export type IProductInCard = IProduct & {
-  productQty: number;
 }

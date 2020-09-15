@@ -12,18 +12,18 @@ import { useShoppingCart } from './Context';
 import useStyles from './styles';
 
 function ShoppingCart() {
-  const [productsInCart] = useShoppingCart();
+  const [inShoppingCart] = useShoppingCart();
   const classes = useStyles();
 
   return (
     <Card className={classes.card} elevation={6}>
       <CardHeader title="Carrinho" />
       <CardContent>
-        {productsInCart.length > 0 ?
+        {inShoppingCart.length > 0 ?
         (
           <List>
             <Divider />
-            {productsInCart.map(product => (
+            {inShoppingCart.map(product => (
               <div key={product._id}>
                 <ListItemCart product={product} />
                 <Divider />

@@ -11,15 +11,18 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import RemoveIcon from '@material-ui/icons/Remove';
 import Alert from 'components/Alert';
 import { useShoppingCart } from 'components/ShoppingCart/Context';
+import Toast from 'components/Toast';
 import money from 'hooks/useMask/money';
-import { IProductInCard } from 'models/product';
+import { IProduct } from 'models/product';
 import React from 'react';
-import { decrementQty, incrementQty, removeProductInCard } from 'stores/shoppingCart';
+import { useMutation } from 'react-apollo';
+import { decrementInShoppingCart, incrementInShoppingCart, removeInShoppingCart } from 'services/product';
+import { decrementQty, incrementQty, removeProductInCart } from 'stores/shoppingCart';
 
 import useStyles from './styles';
 
 interface IProps{
-  product: IProductInCard;
+  product: IProduct;
 }
 
 export default function ListItemCart(props: IProps) {
@@ -27,23 +30,55 @@ export default function ListItemCart(props: IProps) {
   const classes = useStyles();
   const [, dispatch] = useShoppingCart();
 
-  const handleAdd = () => {
-    dispatch(incrementQty(product._id));
+  const [handleDecrementInShoppingCart] = useMutation<{ decrementInShoppingCart: IProduct}>(
+    decrementInShoppingCart
+  );
+  const [handleIncrementInShoppingCart] = useMutation<{ incrementInShoppingCart: IProduct}>(
+    incrementInShoppingCart
+  );
+  const [handleRemoveInShoppingCart] = useMutation<IProduct>(
+    removeInShoppingCart
+  );
+  
+  const handleSub = async () => {
+    handleDecrementInShoppingCart({
+      variables:{ _id: product._id }
+    }).then(()=>{
+      dispatch(decrementQty(product._id));
+    })
+    .catch((error)=>{
+      Toast.error(error);
+    })
   }
   
-  const handleSub = () => {
-    dispatch(decrementQty(product._id));
+  const handleAdd = () => {
+    handleIncrementInShoppingCart({
+      variables:{ _id: product._id }
+    }).then(()=>{
+      dispatch(incrementQty(product._id));
+    }).catch((error)=>{
+      Toast.error(error);
+    })
   }
-
-  const handleDelete = async () => {
+  
+  const handleRemoveFromCart = async () => {
     const confirm = await Alert.confirm(`Deseja remover o produto '${product.title}' do carrinho?`)
-    if(confirm) dispatch(removeProductInCard(product._id));
+    if(!confirm) return;
+    handleRemoveInShoppingCart({
+      variables:{ 
+        _id: product._id
+      }
+    }).then(()=>{
+      dispatch(removeProductInCart(product._id));
+    }).catch((error)=>{
+      Toast.error(error);
+    })
   }
 
   return (
-    <ListItem button>
+    <ListItem>
       <ListItemIcon>
-        <IconButton onClick={handleDelete} size="small">
+        <IconButton onClick={handleRemoveFromCart} size="small">
           <CancelIcon />
         </IconButton>
       </ListItemIcon>
@@ -61,7 +96,7 @@ export default function ListItemCart(props: IProps) {
       />
       <ListItemSecondaryAction className={classes.actions}>
         <IconButton 
-          disabled={product.productQty < 2}
+          disabled={product.inShoppingCart < 2}
           color='default'
           size="small"
           onClick={handleSub}
@@ -69,7 +104,7 @@ export default function ListItemCart(props: IProps) {
           <RemoveIcon />
         </IconButton>
         <Typography color="textPrimary" variant="subtitle1">
-          {product.productQty}
+          {product.inShoppingCart}
         </Typography>
         <IconButton color='default' size="small" onClick={handleAdd}>
           <AddIcon />

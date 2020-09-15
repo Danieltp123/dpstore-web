@@ -8,62 +8,78 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { useShoppingCart } from 'components/ShoppingCart/Context';
 import { calculateTotal } from 'helpers/calculateTotal';
 import money from 'hooks/useMask/money';
-import React, { useEffect, useState } from 'react';
+import { IProduct } from 'models/product';
+import React, { Fragment, ReactNode, useEffect, useState } from 'react';
+import { Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
+import { productsInShoppingCart } from 'services/product';
+import { addProductsInCart } from 'stores/shoppingCart';
 
 import useStyles, { StyledBadge } from './styles';
 
+interface IProps {
+  children: NonNullable<ReactNode>;
+  maxWidth?: false | "xs" | "sm" | "md" | "lg" | "xl" | undefined;
+}
 
-function PageLayout(props: any)  {
+function PageLayout({ children, maxWidth }: IProps)  {
   const classes = useStyles();
-  const [productsInCard] = useShoppingCart();
+  const [inShoppingCart, dispatch] = useShoppingCart();
   const [total, setTotal] = useState<number>(0);
+  
+  const fetchData = ({ productsInShoppingCart }: { productsInShoppingCart: IProduct[] }) => {
+    dispatch(addProductsInCart(productsInShoppingCart));
+  };
 
   useEffect(()=>{
-    setTotal(calculateTotal(productsInCard));
-  },[productsInCard])
+    setTotal(calculateTotal(inShoppingCart));
+  },[inShoppingCart])
   
   return (
-    <>
-      <AppBar position="static">
-        <Toolbar>
-          <Link to='/' className={classes.title}>
-            <Typography variant="h6">
+    <Query onCompleted={fetchData} query={productsInShoppingCart}>
+    {()=> (
+      <Fragment>
+        <AppBar position="static">
+          <Toolbar>
+            <Link to='/' className={classes.title}>
+              <Typography variant="h6">
+                LOGO
+              </Typography>
+            </Link>
+            {Boolean(total) && (
+              <Typography variant="h6" className={classes.total}>
+                {money.apply(total)}
+              </Typography>
+            )}
+            <Link to='/carrinho'>
+              <IconButton aria-label="cart" color='inherit'>
+                <StyledBadge badgeContent={inShoppingCart.length} color="primary">
+                  <ShoppingCartIcon color="inherit" />
+                </StyledBadge>
+              </IconButton>    
+            </Link>
+          </Toolbar>
+        </AppBar>
+        <Box height="30vh" className={ classes.logo }>
+          <Link to='/'>
+            <Typography align='center' variant="h4">
               LOGO
             </Typography>
           </Link>
-          {Boolean(total) && (
-            <Typography variant="h6" className={classes.total}>
-              {money.apply(total)}
-            </Typography>
-          )}
-          <Link to='/carrinho'>
-            <IconButton aria-label="cart" color='inherit'>
-              <StyledBadge badgeContent={productsInCard.length} color="primary">
-                <ShoppingCartIcon color="inherit" />
-              </StyledBadge>
-            </IconButton>    
-          </Link>
-        </Toolbar>
-      </AppBar>
-      <Box height="30vh" className={ classes.logo }>
-        <Link to='/'>
-          <Typography align='center' variant="h4">
-            LOGO
-          </Typography>
-        </Link>
-      </Box>
-      <Container classes={{ root: classes.container }}>
-        {props.children}
-      </Container>
-      <AppBar position="static" color="secondary">
-        <Toolbar variant="dense">
-          <Typography variant="subtitle2" className={classes.footer}>
-            Daniel Teixeira Patrício © 2020
-          </Typography>  
-        </Toolbar>
-      </AppBar>
-    </>
+        </Box>
+        <Container classes={{ root: classes.container }} maxWidth={maxWidth}>
+          {children}
+        </Container>
+        <AppBar position="static" color="secondary">
+          <Toolbar variant="dense">
+            <Typography variant="subtitle2" className={classes.footer}>
+              Daniel Teixeira Patrício © 2020
+            </Typography>  
+          </Toolbar>
+        </AppBar>
+      </Fragment>
+    )}
+    </Query>
   );
 }
 

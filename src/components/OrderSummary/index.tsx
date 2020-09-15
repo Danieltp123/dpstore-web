@@ -7,23 +7,21 @@ import { useShoppingCart } from 'components/ShoppingCart/Context';
 import { calculateTotal } from 'helpers/calculateTotal';
 import money from 'hooks/useMask/money';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import useStyles from './styles';
 
-function OrderSummary() {
-  const [productsInCart] = useShoppingCart();
+interface IProps {
+  handleCheckout?: ()=> void;
+}
+
+function OrderSummary(props: IProps) {
+  const [inShoppingCart] = useShoppingCart();
   const classes = useStyles();
-  const history = useHistory();
   const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
-    setTotal(calculateTotal(productsInCart));
-  }, [productsInCart])
-
-  const handleCheckout = () => {
-    history.push('/checkout');
-  }
+    setTotal(calculateTotal(inShoppingCart));
+  }, [inShoppingCart])
 
   return (
     <Card className={classes.card} elevation={6}>
@@ -42,10 +40,11 @@ function OrderSummary() {
       </CardContent>
       <CardActions>
         <Button
-          onClick={handleCheckout}
+          onClick={props.handleCheckout && props.handleCheckout}
           variant="contained"
           color="primary"
-          disabled={productsInCart.length < 1}
+          type="submit"
+          disabled={inShoppingCart.length < 1}
           fullWidth
         >
           Comprar

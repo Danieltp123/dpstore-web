@@ -5,6 +5,7 @@ const props: ComponentsProps = {
     variant: 'outlined',
     margin: 'dense',
     size: 'small',
+    color: 'secondary',
     fullWidth: true
   },
   MuiFormControl: {
