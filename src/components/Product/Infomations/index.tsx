@@ -24,7 +24,7 @@ export default function ProductInformations(props: IProps) {
     incrementInShoppingCart
   );
 
-  const handleAddInCart = async () => {
+  const handleAddInCart = () => {
     handleIcrementAvailableQty({
       variables:{ _id: product._id }
     }).then(()=>{

@@ -1,6 +1,5 @@
-import { IProduct } from 'models/product';
 import React, { createContext, useContext, useReducer } from 'react';
-import reducer, { initialState } from 'stores/shoppingCart';
+import reducer, { initialState, IState } from 'stores/shoppingCart';
 
 const ShoppingCartContext = createContext<any>(null);
 
@@ -14,7 +13,7 @@ export const ShoppingCartProvider = ({ children }: {children : JSX.Element}) => 
   );
 };
 
-export const useShoppingCart = (): [IProduct[], React.Dispatch<any>] => {
-  const contextValue = useContext<[IProduct[], React.Dispatch<any>]>(ShoppingCartContext);
+export const useShoppingCart = (): [IState, React.Dispatch<any>] => {
+  const contextValue = useContext<[IState, React.Dispatch<any>]>(ShoppingCartContext);
   return contextValue;
 };

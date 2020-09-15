@@ -24,16 +24,17 @@ interface IProps {
 
 function PageLayout({ children, maxWidth }: IProps)  {
   const classes = useStyles();
-  const [inShoppingCart, dispatch] = useShoppingCart();
+  const [{ data }, dispatch] = useShoppingCart();
   const [total, setTotal] = useState<number>(0);
   
   const fetchData = ({ productsInShoppingCart }: { productsInShoppingCart: IProduct[] }) => {
+    console.log(productsInShoppingCart);
     dispatch(addProductsInCart(productsInShoppingCart));
   };
 
   useEffect(()=>{
-    setTotal(calculateTotal(inShoppingCart));
-  },[inShoppingCart])
+    setTotal(calculateTotal(data));
+  },[data])
   
   return (
     <Query onCompleted={fetchData} query={productsInShoppingCart}>
@@ -53,7 +54,7 @@ function PageLayout({ children, maxWidth }: IProps)  {
             )}
             <Link to='/carrinho'>
               <IconButton aria-label="cart" color='inherit'>
-                <StyledBadge badgeContent={inShoppingCart.length} color="primary">
+                <StyledBadge badgeContent={data.length} color="primary">
                   <ShoppingCartIcon color="inherit" />
                 </StyledBadge>
               </IconButton>    

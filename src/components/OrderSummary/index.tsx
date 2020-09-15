@@ -15,13 +15,13 @@ interface IProps {
 }
 
 function OrderSummary(props: IProps) {
-  const [inShoppingCart] = useShoppingCart();
+  const [{ data }] = useShoppingCart();
   const classes = useStyles();
   const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
-    setTotal(calculateTotal(inShoppingCart));
-  }, [inShoppingCart])
+    setTotal(calculateTotal(data));
+  }, [data])
 
   return (
     <Card className={classes.card} elevation={6}>
@@ -44,7 +44,7 @@ function OrderSummary(props: IProps) {
           variant="contained"
           color="primary"
           type="submit"
-          disabled={inShoppingCart.length < 1}
+          disabled={data.length < 1}
           fullWidth
         >
           Comprar

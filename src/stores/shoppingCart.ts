@@ -10,46 +10,72 @@ export enum enProductsInCartAction {
   RESET_DATA = 'RESET_DATA'
 }
 
+export type IState = {
+  data: any[],
+  initiated: boolean
+}
+
 /* Initial State. */
-export const initialState: IProduct[] = [];
+export const initialState: IState = {
+  data: [],
+  initiated: false
+};
 
 /* Reducer */
-export default (state = initialState, action: any): IProduct[] => {
+export default (state = initialState, action: any): IState => {
   switch (action.type) {
+    
     case enProductsInCartAction.INIT_PRODUCTS_IN_CART:
-      return action.inShoppingCart;
-
+      if(!state.initiated)
+        return ({ ...state,initiated: true, data: action.inShoppingCart });
+      return state;
+    
     case enProductsInCartAction.ADD_PRODUCT:
-      const hasProduct = state.find(item => item._id === action.product._id);
+      const hasProduct = state.data.find(item => item._id === action.product._id);
       if (hasProduct) {
-        return state.map(item => {
-          if (item._id === action.product._id) {
+        return ({
+          ...state,
+          data: state.data.map(item => {
+            if (item._id === action.product._id) {
+              item.inShoppingCart += 1;
+            }
+            return item;
+          }),
+        })
+      };
+      return ({
+        ...state,
+        data: [...state.data, {...action.product, inShoppingCart: 1} as IProduct]
+      });
+    
+    case enProductsInCartAction.REMOVE_PRODUCT:
+      return ({
+        ...state,
+        data: state.data.filter(item => item._id !== action._id)
+      });    
+    
+    case enProductsInCartAction.INCREMENT_QTY:
+      return ({
+        ...state,
+        data: state.data.map(item => {
+          if (item._id === action._id) {
             item.inShoppingCart += 1;
           }
           return item;
-        });
-      };
-      return [...state, {...action.product, inShoppingCart: 1} as IProduct];
-      
-    case enProductsInCartAction.REMOVE_PRODUCT:
-      return state.filter(item => item._id !== action._id);
-        
-    case enProductsInCartAction.INCREMENT_QTY:
-      return state.map(item => {
-        if (item._id === action._id) {
-          item.inShoppingCart += 1;
-        }
-        return item;
+        }),
       });
-
+    
     case enProductsInCartAction.DECREMENT_QTY:
-      return state.map(item => {
-        if (item._id === action._id) {
-          item.inShoppingCart -= 1;
-        }
-        return item;
+      return ({
+        ...state,
+        data: state.data.map(item => {
+          if (item._id === action._id) {
+            item.inShoppingCart -= 1;
+          }
+          return item;
+        })
       });
-
+    
     case enProductsInCartAction.RESET_DATA:
       return initialState;
 

@@ -20,6 +20,8 @@ export function errorMessageFormatter(err: any): string {
       return 'Produto indisponível';
     case 'GraphQL error: credit-card-invalid':
       return 'Cartão de crédito inválido';
+    case 'GraphQL error: product-in-shopping-cart-empty':
+      return 'Produto já está fora do carrinho';
     case 'api-error':
       if (err.status === -1) {
         return 'Não conseguimos se comunicar com o servidor';

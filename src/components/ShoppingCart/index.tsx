@@ -6,24 +6,24 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ListItemCart from 'components/Product/ListItemCart';
-import React from 'react';
+import React, { memo } from 'react';
 
 import { useShoppingCart } from './Context';
 import useStyles from './styles';
 
-function ShoppingCart() {
-  const [inShoppingCart] = useShoppingCart();
+const ShoppingCart = memo(function ShoppingCart() {
+  const [{ data }] = useShoppingCart();
   const classes = useStyles();
 
   return (
     <Card className={classes.card} elevation={6}>
       <CardHeader title="Carrinho" />
       <CardContent>
-        {inShoppingCart.length > 0 ?
+        {data.length > 0 ?
         (
           <List>
             <Divider />
-            {inShoppingCart.map(product => (
+            {data.map(product => (
               <div key={product._id}>
                 <ListItemCart product={product} />
                 <Divider />
@@ -42,6 +42,6 @@ function ShoppingCart() {
       </CardContent>
     </Card> 
   );
-}
+})
 
 export default ShoppingCart;

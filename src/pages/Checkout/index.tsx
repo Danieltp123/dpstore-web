@@ -14,6 +14,7 @@ import React from 'react';
 import { useMutation } from 'react-apollo';
 import { useHistory } from 'react-router-dom';
 import { createOrder } from 'services/order';
+import { resetProductInCart } from 'stores/shoppingCart';
 import * as Yup from 'yup';
 
 import useStyles from './styles';
@@ -32,7 +33,7 @@ const validationSchema = Yup.object().shape({
 function ShoppingCart() {
   const history = useHistory();
   const classes = useStyles();
-  const [inShoppingCart] = useShoppingCart();
+  const [{ data },dispatch] = useShoppingCart();
   const smDown = useMediaQuery((theme:Theme) => theme.breakpoints.down('sm'));
   
   const [handleCreateOrder] = useMutation<IOrder>(
@@ -49,7 +50,7 @@ function ShoppingCart() {
       variables: { 
         newOrderData: {
           ...values,
-          productsOrder: inShoppingCart.map(({ _id, inShoppingCart }) => ({ 
+          productsOrder: data.map(({ _id, inShoppingCart }) => ({ 
             productId: _id,
             productQty: inShoppingCart
           }))
@@ -59,6 +60,7 @@ function ShoppingCart() {
       Toast.show("Pedido salvo com sucesso");
       history.push('/');
       actions.resetForm();
+      dispatch(resetProductInCart());
     }).catch(error=>{
       Toast.error(error);
     }).then(()=>{

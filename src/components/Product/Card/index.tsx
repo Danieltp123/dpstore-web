@@ -35,11 +35,12 @@ export default function ProductCard(props: IProps) {
     history.push(`/detalhes/${product._id}`)
   }
 
-  const handleAddInCart = async () => {
+  const handleAddInCart = () => {
     handleIncrementInShoppingCart({
       variables:{ _id: product._id }
     })
-    .then(()=>{
+    .then((data)=>{
+      console.log(data)
       dispatch(addProductInCart(product));
     })
     .catch(error =>{
