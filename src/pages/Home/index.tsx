@@ -17,12 +17,12 @@ function Home() {
   return (
     <Layout>
       <Grid container>
-        <Backdrop open={loading} className={classes.backdrop}>
-          <CircularProgress color="primary" />
+        <Backdrop open={loading} data-cy='loading-backdrop' className={classes.backdrop}>
+          <CircularProgress data-cy='loading-circularprogress' color="primary" />
         </Backdrop>
-        {!loading && data?.products?.map(item=>(
-          <Grid key={item._id} item xs={12} sm={6} md={4} xl={3}>
-            <ProductCard product={item}/>
+        {!loading && data?.products?.map((item)=>(
+          <Grid key={item._id} data-cy={`pl-item-${item._id}`} item xs={12} sm={6} md={4} xl={3}>
+            <ProductCard data-cy={`card-item-${item._id}`} product={item}/>
           </Grid>
         ))}
       </Grid>

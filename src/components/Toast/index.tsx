@@ -1,10 +1,9 @@
 import Snackbar from '@material-ui/core/Snackbar';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { errorMessageFormatter } from 'formatters/errorMessage';
-import React, {
-  ComponentType, MemoExoticComponent, useCallback, useMemo,
-} from 'react';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { errorMessageFormatter } from 'formatters/errorMessage';
+import React, { ComponentType, MemoExoticComponent, useCallback, useMemo } from 'react';
+
 import ToastGlobalProvider, { showGlobalToast } from './global';
 
 const TOAST_DEFAULT_TIMEOUT = 3000;
@@ -71,6 +70,7 @@ const Toast = (props: IProps): JSX.Element => {
       className={classes.wrapper}
     >
       <Alert
+        data-cy={`toast-${isError ? 'error' : 'success'}`}
         severity={isError ? 'error' : 'success'}
         onClose={handleClose}
       >

@@ -52,15 +52,16 @@ export default function ProductCard(props: IProps) {
     <Card className={classes.root}>
       <div onClick={handleDetails}>
         <CardMedia
+          data-cy="card-image"
           className={classes.media}
           image={product.imgUrl}
           title={product.title}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography gutterBottom data-cy="card-title" variant="h5" component="h2">
             {product.title}
           </Typography>
-          <Typography variant="h5">
+          <Typography data-cy="card-price" variant="h5">
             por {money.apply(product.price)}
           </Typography>
           <ProductAvailableQty product={product}/>
@@ -68,8 +69,9 @@ export default function ProductCard(props: IProps) {
       </div>
       <Typography align="right" className={classes.iconButton}>
         <Tooltip title="Adicionar ao carrinho" aria-label="add" placement="left">
-          <IconButton 
+          <IconButton
             color="primary"
+            data-cy="card-add-cart"
             disabled={(product.availableQty - product.inShoppingCart) < 1}
             onClick={handleAddInCart}
           >

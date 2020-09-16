@@ -37,6 +37,10 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       textAlign: 'center'
     },
+    cursorPointer:{
+      cursor: 'pointer',
+      color: theme.palette.common.white
+    }
   }),
 );
 

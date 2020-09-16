@@ -5,13 +5,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import clsx from 'clsx';
 import { useShoppingCart } from 'components/ShoppingCart/Context';
 import { calculateTotal } from 'helpers/calculateTotal';
 import money from 'hooks/useMask/money';
 import { IProduct } from 'models/product';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react';
 import { Query } from 'react-apollo';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { productsInShoppingCart } from 'services/product';
 import { addProductsInCart } from 'stores/shoppingCart';
 
@@ -24,6 +25,7 @@ interface IProps {
 
 function PageLayout({ children, maxWidth }: IProps)  {
   const classes = useStyles();
+  const history = useHistory()
   const [{ data }, dispatch] = useShoppingCart();
   const [total, setTotal] = useState<number>(0);
   
@@ -34,7 +36,11 @@ function PageLayout({ children, maxWidth }: IProps)  {
 
   useEffect(()=>{
     setTotal(calculateTotal(data));
-  },[data])
+  },[data]);
+
+  const handleRedirectTo = (path: string) => () =>{
+    history.push(path);
+  }
   
   return (
     <Query onCompleted={fetchData} query={productsInShoppingCart}>
@@ -42,36 +48,42 @@ function PageLayout({ children, maxWidth }: IProps)  {
       <Fragment>
         <AppBar position="static">
           <Toolbar>
-            <Link to='/' className={classes.title}>
-              <Typography variant="h6">
-                LOGO
-              </Typography>
-            </Link>
+            <Typography
+              data-cy="header-logo"
+              onClick={handleRedirectTo('/')}
+              className={clsx([classes.title, classes.cursorPointer])}
+              variant="h6"
+            >
+              LOGO
+            </Typography>
+
             {Boolean(total) && (
-              <Typography variant="h6" className={classes.total}>
+              <Typography variant="h6" data-cy="header-price" className={classes.total}>
                 {money.apply(total)}
               </Typography>
             )}
-            <Link to='/carrinho'>
-              <IconButton aria-label="cart" color='inherit'>
-                <StyledBadge badgeContent={data.length} color="primary">
-                  <ShoppingCartIcon color="inherit" />
-                </StyledBadge>
-              </IconButton>    
-            </Link>
+            <IconButton
+              data-cy="header-cart"
+              onClick={handleRedirectTo('/carrinho')}
+              aria-label="carrinho de compras"
+              color='inherit'
+              className={classes.cursorPointer}
+            >
+              <StyledBadge data-cy="badge-cart" badgeContent={data.length} color="primary">
+                <ShoppingCartIcon color="inherit" />
+              </StyledBadge>
+            </IconButton>
           </Toolbar>
         </AppBar>
-        <Box height="30vh" className={ classes.logo }>
-          <Link to='/'>
-            <Typography align='center' variant="h4">
-              LOGO
-            </Typography>
-          </Link>
+        <Box height="30vh" className={classes.logo}>
+          <Typography onClick={handleRedirectTo('/')} className={classes.cursorPointer} align='center' variant="h4">
+            LOGO
+          </Typography>
         </Box>
         <Container classes={{ root: classes.container }} maxWidth={maxWidth}>
           {children}
         </Container>
-        <AppBar position="static" color="secondary">
+        <AppBar data-cy="footer-bar" position="static" color="secondary">
           <Toolbar variant="dense">
             <Typography variant="subtitle2" className={classes.footer}>
               Daniel Teixeira Patrício © 2020

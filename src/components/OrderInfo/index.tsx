@@ -21,7 +21,7 @@ function OrderInfo() {
           Joao Pessoa, Paraiba, Brazil, 58038381
         </Typography>
       </CardContent>
-      <CardHeader title="Pagamento" />
+      <CardHeader data-cy="payment-title" title="Pagamento" />
       <CardContent>
         <CreditCard />
       </CardContent>

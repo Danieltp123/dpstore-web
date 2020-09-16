@@ -7,13 +7,7 @@ import Slide from '@material-ui/core/Slide';
 import useTheme from '@material-ui/core/styles/useTheme';
 import Typography from '@material-ui/core/Typography';
 import useWindowResize from 'hooks/useWindowResize';
-import React, {
-  ComponentType,
-  forwardRef,
-  memo,
-  MemoExoticComponent,
-  useCallback,
-} from 'react';
+import React, { ComponentType, forwardRef, memo, MemoExoticComponent, useCallback } from 'react';
 
 import AlertGlobalProvider, { showGlobalAlert } from './global';
 
@@ -86,12 +80,12 @@ const Alert = (props: IProps): JSX.Element => {
       </DialogContent>
       <DialogActions>
         {props.confirmation && (
-          <Button onClick={handleCancel} color="secondary">
+          <Button data-cy="cancel-dialog" onClick={handleCancel} color="secondary">
             Cancelar
           </Button>
         )}
         <Typography color={props.delete ? 'error' : 'secondary'}>
-          <Button autoFocus={!props.confirmation} onClick={handleOk} color="inherit">
+          <Button data-cy="confirm-dialog" autoFocus={!props.confirmation} onClick={handleOk} color="inherit">
             {props.confirmText || (props.confirmation ? 'Confirmar' : 'Ok')}
           </Button>
         </Typography>

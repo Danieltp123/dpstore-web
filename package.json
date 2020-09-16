@@ -26,8 +26,8 @@
     "babel-preset-react-app": "^9.1.2",
     "camelcase": "^5.3.1",
     "case-sensitive-paths-webpack-plugin": "2.3.0",
+    "clsx": "^1.1.1",
     "css-loader": "3.4.2",
-    "cypress": "^5.1.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint": "^6.6.0",
@@ -75,7 +75,7 @@
     "ts-pnp": "1.1.6",
     "typescript": "3.9.7",
     "url-loader": "2.3.0",
-    "webpack": "4.42.0",
+    "webpack": "^4.44.1",
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
     "workbox-webpack-plugin": "4.3.1",
@@ -85,7 +85,11 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "relay": "relay-compiler --src ./src --schema ./schema.graphql --extensions tsx"
+    "relay": "relay-compiler --src ./src --schema ./schema.graphql --extensions tsx",
+    "cypress": "cypress run",
+    "cypress:open": "cypress open",
+    "cypress:chrome": "cypress run -b chrome",
+    "cypress:firefox": "cypress run -b firefox"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -158,6 +162,7 @@
     ]
   },
   "devDependencies": {
+    "@bahmutov/add-typescript-to-cypress": "^2.1.2",
     "@types/jest": "^24.0.0",
     "@types/lodash": "^4.14.161",
     "@types/node": "^12.0.0",
@@ -166,6 +171,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/yup": "^0.29.7",
     "babel-plugin-relay": "^10.0.1",
+    "cypress": "^5.2.0",
     "relay-config": "^10.0.1"
   }
 }

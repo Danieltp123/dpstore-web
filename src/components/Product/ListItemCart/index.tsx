@@ -76,9 +76,9 @@ export default function ListItemCart(props: IProps) {
   }
 
   return (
-    <ListItem>
+    <ListItem data-cy={`li-cart-${product._id}`}>
       <ListItemIcon>
-        <IconButton onClick={handleRemoveFromCart} size="small">
+        <IconButton data-cy="remove-product-btn" onClick={handleRemoveFromCart} size="small">
           <CancelIcon />
         </IconButton>
       </ListItemIcon>
@@ -99,14 +99,15 @@ export default function ListItemCart(props: IProps) {
           disabled={product.inShoppingCart < 2}
           color='default'
           size="small"
+          data-cy="sub-product-qty"
           onClick={handleSub}
         >
           <RemoveIcon />
         </IconButton>
-        <Typography color="textPrimary" variant="subtitle1">
+        <Typography data-cy="product-qty" color="textPrimary" variant="subtitle1">
           {product.inShoppingCart}
         </Typography>
-        <IconButton color='default' size="small" onClick={handleAdd}>
+        <IconButton data-cy="add-product-qty" color='default' size="small" onClick={handleAdd}>
           <AddIcon />
         </IconButton>
       </ListItemSecondaryAction>

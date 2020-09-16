@@ -13,12 +13,12 @@ export default function ProductAvailableQty(props: IProps) {
     <>
       {(product.availableQty - product.inShoppingCart) > 0 ?
         (
-          <Typography gutterBottom>
+          <Typography data-cy="product-available" gutterBottom>
             Disponível: {product.availableQty - product.inShoppingCart} unidade(s)
           </Typography>
         ):
         (
-          <Typography color="error" gutterBottom>
+          <Typography data-cy="product-unavailable" color="error" gutterBottom>
             (indisponível)
           </Typography>
         )

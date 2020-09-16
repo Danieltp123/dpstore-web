@@ -35,11 +35,12 @@ function OrderSummary(props: IProps) {
         </Typography>
         <Divider />
         <Typography className={classes.spaceBetween} variant="h6">
-          <span>Total:</span><span>{money.apply(total)}</span>
+          <span>Total:</span><span data-cy="price-total">{money.apply(total)}</span>
         </Typography>
       </CardContent>
       <CardActions>
         <Button
+          data-cy="buy-btn"
           onClick={props.handleCheckout && props.handleCheckout}
           variant="contained"
           color="primary"

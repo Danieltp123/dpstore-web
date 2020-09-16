@@ -23,9 +23,9 @@ const ShoppingCart = memo(function ShoppingCart() {
         (
           <List>
             <Divider />
-            {data.map(product => (
+            {data.map((product) => (
               <div key={product._id}>
-                <ListItemCart product={product} />
+                <ListItemCart  product={product} />
                 <Divider />
               </div>
             ))}

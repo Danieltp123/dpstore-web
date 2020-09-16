@@ -11,6 +11,7 @@ function CreditCard() {
     <Grid container spacing={1}>
       <Grid item xs={12}>
         <TextField
+          data-cy="credit-card-input"
           label="NÚMERO DO CARTÃO"
           name="creditCard"
           mask="creditCard"
